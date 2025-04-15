@@ -15,13 +15,13 @@ from utils.visualization import (
 )
 
 st.set_page_config(
-    page_title="Reports | FinEu Dashboard",
+    page_title="Report | FinEu Dashboard",
     page_icon="💳",
     layout="wide"
 )
 
 def generate_excel_report():
-    """Generate Excel report with multiple sheets"""
+    """Genera report Excel con fogli multipli"""
     output = BytesIO()
     writer = pd.ExcelWriter(output, engine='openpyxl')
     
@@ -103,7 +103,7 @@ def generate_excel_report():
     return output.getvalue()
 
 def generate_monthly_report(year, month):
-    """Generate monthly performance report for the specified period"""
+    """Genera report delle performance mensili per il periodo specificato"""
     if 'cards_data' not in st.session_state or 'financial_data' not in st.session_state:
         return None
     
@@ -164,7 +164,7 @@ def generate_monthly_report(year, month):
     return output.getvalue()
 
 def generate_regulatory_report():
-    """Generate a regulatory report with key metrics and compliance information"""
+    """Genera un report normativo con metriche chiave e informazioni di conformità"""
     if 'cards_data' not in st.session_state or 'financial_data' not in st.session_state:
         return None
     
@@ -231,54 +231,54 @@ def generate_regulatory_report():
     return output.getvalue()
 
 def create_download_link(buffer, download_filename, link_text):
-    """Create a download link for a given file"""
+    """Crea un link di download per un file"""
     b64 = base64.b64encode(buffer).decode()
     return f'<a href="data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,{b64}" download="{download_filename}">{link_text}</a>'
 
 def main():
-    st.title("Reports & Regulatory Compliance")
+    st.title("Report e Conformità Normativa")
     
     if 'data_initialized' not in st.session_state or not st.session_state.data_initialized:
-        st.warning("Data not initialized. Please return to the home page.")
+        st.warning("Dati non inizializzati. Si prega di tornare alla home page.")
         return
     
     # Create tabs for different report types
     tab1, tab2, tab3, tab4 = st.tabs([
-        "Monthly Reports", 
-        "Annual Reports", 
-        "Regulatory Reports",
-        "Custom Reports"
+        "Report Mensili", 
+        "Report Annuali", 
+        "Report Normativi",
+        "Report Personalizzati"
     ])
     
     with tab1:
-        st.subheader("Monthly Performance Reports")
+        st.subheader("Report sulle Performance Mensili")
         
         col1, col2 = st.columns(2)
         
         with col1:
             # Select year and month
             years = sorted(st.session_state.cards_data['year'].unique())
-            selected_year = st.selectbox("Select Year", options=years)
+            selected_year = st.selectbox("Seleziona Anno", options=years)
             
             # Get available months for the selected year
             available_months = sorted(st.session_state.cards_data[st.session_state.cards_data['year'] == selected_year]['month'].unique())
-            selected_month = st.selectbox("Select Month", options=available_months)
+            selected_month = st.selectbox("Seleziona Mese", options=available_months)
             
-            if st.button("Generate Monthly Report"):
+            if st.button("Genera Report Mensile"):
                 monthly_report = generate_monthly_report(selected_year, selected_month)
                 
                 if monthly_report:
-                    st.success("Monthly report generated successfully!")
+                    st.success("Report mensile generato con successo!")
                     st.markdown(
                         create_download_link(
                             monthly_report, 
-                            f"FinEu_Monthly_Report_{selected_year}_{selected_month}.xlsx",
-                            "📥 Download Monthly Report"
+                            f"FinEu_Report_Mensile_{selected_year}_{selected_month}.xlsx",
+                            "📥 Scarica Report Mensile"
                         ),
                         unsafe_allow_html=True
                     )
                 else:
-                    st.error("Failed to generate report. No data available for the selected period.")
+                    st.error("Impossibile generare il report. Nessun dato disponibile per il periodo selezionato.")
         
         with col2:
             # Show preview of monthly metrics
@@ -290,20 +290,20 @@ def main():
                 month_fin = fin_df[(fin_df['year'] == selected_year) & (fin_df['month'] == selected_month)]
                 
                 if not month_data.empty and not month_fin.empty:
-                    st.info("Monthly Report Preview")
+                    st.info("Anteprima Report Mensile")
                     
                     mcol1, mcol2 = st.columns(2)
                     
                     with mcol1:
-                        st.metric("New Cards", f"{month_data['new_cards'].values[0]:.0f}")
-                        st.metric("Active Cards", f"{month_data['active_cards'].values[0]:.0f}")
+                        st.metric("Nuove Carte", f"{month_data['new_cards'].values[0]:.0f}")
+                        st.metric("Carte Attive", f"{month_data['active_cards'].values[0]:.0f}")
                     
                     with mcol2:
-                        st.metric("Monthly Revenue", f"€{month_fin['total_revenue'].values[0]:.2f}")
-                        st.metric("Monthly Profit", f"€{month_fin['profit'].values[0]:.2f}")
+                        st.metric("Ricavi Mensili", f"€{month_fin['total_revenue'].values[0]:.2f}")
+                        st.metric("Profitto Mensile", f"€{month_fin['profit'].values[0]:.2f}")
                     
                     # Show YTD metrics
-                    st.info("Year-to-Date (YTD) Metrics")
+                    st.info("Metriche da Inizio Anno (YTD)")
                     
                     ytd_cards = cards_df[(cards_df['year'] == selected_year) & (cards_df['month'] <= selected_month)]
                     ytd_fin = fin_df[(fin_df['year'] == selected_year) & (fin_df['month'] <= selected_month)]
@@ -311,28 +311,28 @@ def main():
                     ycol1, ycol2 = st.columns(2)
                     
                     with ycol1:
-                        st.metric("YTD New Cards", f"{ytd_cards['new_cards'].sum():.0f}")
-                        st.metric("YTD Revenue", f"€{ytd_fin['total_revenue'].sum():.2f}")
+                        st.metric("Nuove Carte YTD", f"{ytd_cards['new_cards'].sum():.0f}")
+                        st.metric("Ricavi YTD", f"€{ytd_fin['total_revenue'].sum():.2f}")
                     
                     with ycol2:
-                        st.metric("YTD Profit", f"€{ytd_fin['profit'].sum():.2f}")
+                        st.metric("Profitto YTD", f"€{ytd_fin['profit'].sum():.2f}")
                         
                         # Calculate YTD against annual target
                         annual_target = 1000  # cards per year
                         progress = (ytd_cards['new_cards'].sum() / annual_target) * 100
-                        st.metric("Target Progress", f"{progress:.1f}%")
+                        st.metric("Progresso Obiettivo", f"{progress:.1f}%")
         
         # Monthly report description
         st.markdown("""
-        ### Monthly Report Contents
+        ### Contenuto del Report Mensile
         
-        The monthly performance report includes:
+        Il report delle performance mensili include:
         
-        - **Monthly Summary**: Key metrics including new cards distributed, active cards, revenue, costs, and profit for the selected month
-        - **YTD Performance**: Cumulative metrics for the year up to the selected month
-        - **Monthly Details**: Detailed monthly data for all months in the selected year up to the selected month
+        - **Riepilogo Mensile**: Metriche chiave tra cui nuove carte distribuite, carte attive, ricavi, costi e profitto per il mese selezionato
+        - **Performance dall'Inizio dell'Anno**: Metriche cumulative per l'anno fino al mese selezionato
+        - **Dettagli Mensili**: Dati mensili dettagliati per tutti i mesi dell'anno selezionato fino al mese selezionato
         
-        This report is designed for internal performance tracking and operational management.
+        Questo report è progettato per il monitoraggio interno delle performance e la gestione operativa.
         """)
     
     with tab2:
