@@ -320,7 +320,7 @@ def main():
                         # Calculate YTD against annual target
                         annual_target = 1000  # cards per year
                         progress = (ytd_cards['new_cards'].sum() / annual_target) * 100
-                        st.metric("Progresso Obiettivo", f"{progress:.1f}%")
+                        st.metric("Progresso Obiettivo", f"{progress:.2f}%")
         
         # Monthly report description
         st.markdown("""
@@ -409,7 +409,7 @@ def main():
                         # Calculate ROI
                         annual_costs = annual_fin['total_costs'].sum()
                         roi = (annual_profit / annual_costs) * 100 if annual_costs > 0 else 0
-                        st.metric("ROI", f"{roi:.1f}%")
+                        st.metric("ROI", f"{roi:.2f}%")
                     
                     # Show annual revenue breakdown
                     st.subheader("Ripartizione dei Ricavi Annuali")
