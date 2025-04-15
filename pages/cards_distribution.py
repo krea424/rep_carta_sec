@@ -6,30 +6,30 @@ import plotly.graph_objects as go
 from utils.visualization import create_cards_distribution_chart, create_activation_rate_chart
 
 st.set_page_config(
-    page_title="Card Distribution | FinEu Dashboard",
+    page_title="Distribuzione Carte | FinEu Dashboard",
     page_icon="💳",
     layout="wide"
 )
 
 def main():
-    st.title("Card Distribution Analysis")
+    st.title("Analisi Distribuzione Carte")
     
     if 'data_initialized' not in st.session_state or not st.session_state.data_initialized:
-        st.warning("Data not initialized. Please return to the home page.")
+        st.warning("Dati non inizializzati. Si prega di tornare alla pagina principale.")
         return
     
     if 'cards_data' not in st.session_state:
-        st.error("Card distribution data not available.")
+        st.error("Dati sulla distribuzione delle carte non disponibili.")
         return
     
     cards_data = st.session_state.cards_data
     
     # Time period filter
-    st.sidebar.header("Filters")
+    st.sidebar.header("Filtri")
     
     years = sorted(cards_data['year'].unique())
     selected_years = st.sidebar.multiselect(
-        "Select Years",
+        "Seleziona Anni",
         options=years,
         default=years
     )
@@ -39,41 +39,41 @@ def main():
     
     # Create tabs for different views
     tab1, tab2, tab3, tab4 = st.tabs([
-        "Distribution Overview", 
-        "Monthly Analysis", 
-        "Activation Rate", 
-        "Distribution Patterns"
+        "Panoramica Distribuzione", 
+        "Analisi Mensile", 
+        "Tasso di Attivazione", 
+        "Modelli di Distribuzione"
     ])
     
     with tab1:
-        st.subheader("Cards Distribution Overview")
+        st.subheader("Panoramica Distribuzione Carte")
         
         # Display summary metrics
         col1, col2, col3 = st.columns(3)
         with col1:
             total_new = filtered_data['new_cards'].sum()
-            st.metric("Total New Cards", f"{total_new:,.0f}")
+            st.metric("Totale Nuove Carte", f"{total_new:,.0f}")
         
         with col2:
             if not filtered_data.empty:
                 latest_active = filtered_data.iloc[-1]['active_cards']
-                st.metric("Current Active Cards", f"{latest_active:,.0f}")
+                st.metric("Carte Attive Attuali", f"{latest_active:,.0f}")
             else:
-                st.metric("Current Active Cards", "0")
+                st.metric("Carte Attive Attuali", "0")
         
         with col3:
             if not filtered_data.empty:
                 activation_rate = filtered_data.iloc[-1]['active_cards'] / filtered_data['new_cards'].sum()
-                st.metric("Overall Activation Rate", f"{activation_rate:.2%}")
+                st.metric("Tasso di Attivazione Complessivo", f"{activation_rate:.2%}")
             else:
-                st.metric("Overall Activation Rate", "0%")
+                st.metric("Tasso di Attivazione Complessivo", "0%")
         
         # Display distribution chart
         distribution_chart = create_cards_distribution_chart(filtered_data)
         st.plotly_chart(distribution_chart, use_container_width=True)
         
         # Annual summary
-        st.subheader("Annual Cards Summary")
+        st.subheader("Riepilogo Annuale Carte")
         annual_summary = filtered_data.groupby('year').agg({
             'new_cards': 'sum',
             'active_cards': 'last'
@@ -82,15 +82,16 @@ def main():
         # Add activation rate column
         annual_summary['activation_rate'] = annual_summary['active_cards'] / annual_summary['new_cards']
         
-        # Format table
+        # Format table and rename columns
+        annual_summary.columns = ['Anno', 'Nuove Carte', 'Carte Attive', 'Tasso di Attivazione']
         st.dataframe(annual_summary.style.format({
-            'new_cards': '{:,.0f}',
-            'active_cards': '{:,.0f}',
-            'activation_rate': '{:.2%}'
+            'Nuove Carte': '{:,.0f}',
+            'Carte Attive': '{:,.0f}',
+            'Tasso di Attivazione': '{:.2%}'
         }))
     
     with tab2:
-        st.subheader("Monthly Distribution Analysis")
+        st.subheader("Analisi Distribuzione Mensile")
         
         # Create a heatmap of card distribution by month and year
         heatmap_data = filtered_data.pivot_table(
@@ -102,7 +103,7 @@ def main():
         
         fig = px.imshow(
             heatmap_data,
-            labels=dict(x="Year", y="Month", color="New Cards"),
+            labels=dict(x="Anno", y="Mese", color="Nuove Carte"),
             x=heatmap_data.columns,
             y=[f"{month}" for month in range(1, 13)],
             aspect="auto",
@@ -110,28 +111,28 @@ def main():
         )
         
         fig.update_layout(
-            title="New Cards Distribution by Month and Year",
-            xaxis_title="Year",
-            yaxis_title="Month",
-            coloraxis_colorbar_title="New Cards"
+            title="Distribuzione Nuove Carte per Mese e Anno",
+            xaxis_title="Anno",
+            yaxis_title="Mese",
+            coloraxis_colorbar_title="Nuove Carte"
         )
         
         st.plotly_chart(fig, use_container_width=True)
         
         # Monthly statistics table
-        st.subheader("Monthly Distribution Statistics")
+        st.subheader("Statistiche Distribuzione Mensile")
         
         monthly_stats = filtered_data.groupby('month').agg({
             'new_cards': ['mean', 'min', 'max', 'sum']
         }).reset_index()
         
-        monthly_stats.columns = ['Month', 'Average', 'Minimum', 'Maximum', 'Total']
+        monthly_stats.columns = ['Mese', 'Media', 'Minimo', 'Massimo', 'Totale']
         
         st.dataframe(monthly_stats.style.format({
-            'Average': '{:.1f}',
-            'Minimum': '{:.1f}',
-            'Maximum': '{:.1f}',
-            'Total': '{:.0f}'
+            'Media': '{:.1f}',
+            'Minimo': '{:.1f}',
+            'Massimo': '{:.1f}',
+            'Totale': '{:.0f}'
         }))
     
     with tab3:

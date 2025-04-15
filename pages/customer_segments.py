@@ -43,7 +43,7 @@ def main():
     ])
     
     with tabs[0]:
-        st.subheader("Customer Segment Distribution")
+        st.subheader("Distribuzione dei Segmenti di Clientela")
         
         # Display segment distribution chart
         segment_chart = create_segment_distribution_chart(segmentation_data)
@@ -51,16 +51,16 @@ def main():
         
         # Key insights about segmentation
         st.info("""
-        ### Key Insights
-        - **Young & Credit Newbies**: Decreasing trend as the product matures, but still a significant segment
-        - **Credit Rebuilders**: Consistent share with slight growth, showing strong product-market fit
-        - **New Immigrants/Expats**: Growing segment, indicating expanding reach in this demographic
-        - **Self-Employed/Thin File**: Stable segment across the years
-        - **Risk-Averse Consumers**: Maintaining consistent share, provides stable customer base
+        ### Principali Osservazioni
+        - **Giovani & Nuovi al Credito**: Tendenza decrescente con la maturazione del prodotto, ma resta un segmento significativo
+        - **Ricostruttori del Credito**: Quota costante con leggera crescita, mostra un ottimo prodotto-mercato fit
+        - **Nuovi Immigrati/Espatriati**: Segmento in crescita, indica espansione in questo settore demografico
+        - **Lavoratori Autonomi/File Sottile**: Segmento stabile negli anni
+        - **Consumatori Avversi al Rischio**: Mantiene una quota consistente, fornisce una base clienti stabile
         """)
         
         # Segment overview table
-        st.subheader("Segment Distribution by Year")
+        st.subheader("Distribuzione dei Segmenti per Anno")
         
         distribution = segmentation_data['distribution']
         segments = segmentation_data['segments']
@@ -69,7 +69,7 @@ def main():
         distribution_data = []
         
         for year in distribution:
-            year_data = {'Year': year}
+            year_data = {'Anno': year}
             for segment in segments:
                 year_data[segment] = distribution[year][segment]
             distribution_data.append(year_data)
@@ -83,7 +83,7 @@ def main():
         st.dataframe(distribution_df, use_container_width=True)
     
     with tabs[1]:
-        st.subheader(f"Detailed Segment Analysis for {selected_year}")
+        st.subheader(f"Analisi Dettagliata dei Segmenti per il {selected_year}")
         
         # Get distribution for selected year
         year_distribution = segmentation_data['distribution'][selected_year]
@@ -98,7 +98,7 @@ def main():
         )])
         
         fig.update_layout(
-            title=f"Customer Segment Distribution ({selected_year})",
+            title=f"Distribuzione Segmenti Clientela ({selected_year})",
             margin=dict(l=10, r=10, t=60, b=10),
         )
         
@@ -120,23 +120,23 @@ def main():
                 col1, col2 = st.columns(2)
                 
                 with col1:
-                    st.subheader("Segment Size Distribution")
+                    st.subheader("Distribuzione Dimensioni Segmenti")
                     
                     # Create DataFrame for segment numbers
                     segment_df = pd.DataFrame({
-                        'Segment': list(segment_numbers.keys()),
-                        'Percentage': list(year_distribution.values()),
-                        'Estimated Cards': list(segment_numbers.values())
+                        'Segmento': list(segment_numbers.keys()),
+                        'Percentuale': list(year_distribution.values()),
+                        'Carte Stimate': list(segment_numbers.values())
                     })
                     
                     # Format the DataFrame
-                    segment_df['Percentage'] = segment_df['Percentage'].apply(lambda x: f"{x:.1%}")
-                    segment_df['Estimated Cards'] = segment_df['Estimated Cards'].apply(lambda x: f"{x:.0f}")
+                    segment_df['Percentuale'] = segment_df['Percentuale'].apply(lambda x: f"{x:.1%}")
+                    segment_df['Carte Stimate'] = segment_df['Carte Stimate'].apply(lambda x: f"{x:.0f}")
                     
                     st.dataframe(segment_df, use_container_width=True)
                 
                 with col2:
-                    st.subheader("Segment Growth Analysis")
+                    st.subheader("Analisi Crescita Segmenti")
                     
                     # Compare to previous year if not first year
                     if selected_year > 2023:
@@ -158,32 +158,32 @@ def main():
                                 percentage_growth = (absolute_growth / prev_cards) * 100 if prev_cards > 0 else float('inf')
                                 
                                 growth_data.append({
-                                    'Segment': segment,
-                                    'Absolute Growth': absolute_growth,
-                                    'Growth Rate': percentage_growth
+                                    'Segmento': segment,
+                                    'Crescita Assoluta': absolute_growth,
+                                    'Tasso di Crescita': percentage_growth
                                 })
                             
                             growth_df = pd.DataFrame(growth_data)
                             
                             # Format the DataFrame
-                            growth_df['Absolute Growth'] = growth_df['Absolute Growth'].apply(lambda x: f"{x:.0f}")
-                            growth_df['Growth Rate'] = growth_df['Growth Rate'].apply(lambda x: f"{x:.1f}%" if x != float('inf') else "N/A")
+                            growth_df['Crescita Assoluta'] = growth_df['Crescita Assoluta'].apply(lambda x: f"{x:.0f}")
+                            growth_df['Tasso di Crescita'] = growth_df['Tasso di Crescita'].apply(lambda x: f"{x:.1f}%" if x != float('inf') else "N/A")
                             
                             st.dataframe(growth_df, use_container_width=True)
                     else:
-                        st.info(f"No year-over-year comparison available for {selected_year} (first year).")
+                        st.info(f"Nessun confronto anno su anno disponibile per il {selected_year} (primo anno).")
         else:
-            st.warning("Cards data not available for segment size estimation.")
+            st.warning("Dati sulle carte non disponibili per la stima delle dimensioni dei segmenti.")
     
     with tabs[2]:
-        st.subheader("Segment Characteristics Analysis")
+        st.subheader("Analisi Caratteristiche dei Segmenti")
         
         # Display segment characteristics radar chart
         characteristics_chart = create_segment_characteristics_chart(segmentation_data)
         st.plotly_chart(characteristics_chart, use_container_width=True)
         
         # Display characteristics details table
-        st.subheader("Detailed Segment Characteristics")
+        st.subheader("Caratteristiche Dettagliate dei Segmenti")
         
         characteristics = segmentation_data['characteristics']
         
@@ -191,7 +191,7 @@ def main():
         characteristics_rows = []
         
         for segment, attrs in characteristics.items():
-            row = {'Segment': segment}
+            row = {'Segmento': segment}
             row.update(attrs)
             characteristics_rows.append(row)
             
@@ -199,146 +199,146 @@ def main():
         
         # Format the DataFrame
         char_df = char_df.rename(columns={
-            'avg_age': 'Average Age',
-            'avg_deposit': 'Average Deposit (€)',
-            'avg_monthly_spend': 'Avg Monthly Spend (€)',
-            'churn_risk': 'Churn Risk',
-            'upsell_potential': 'Upsell Potential'
+            'avg_age': 'Età Media',
+            'avg_deposit': 'Deposito Medio (€)',
+            'avg_monthly_spend': 'Spesa Media Mensile (€)',
+            'churn_risk': 'Rischio Abbandono',
+            'upsell_potential': 'Potenziale Upsell'
         })
         
         st.dataframe(char_df, use_container_width=True)
         
         # Segment-specific insights
-        st.subheader("Segment-Specific Insights")
+        st.subheader("Approfondimenti Specifici per Segmento")
         
         selected_segment = st.selectbox(
-            "Select Segment for Detailed Insights",
+            "Seleziona un Segmento per Approfondimenti Dettagliati",
             options=segmentation_data['segments']
         )
         
         # Display segment insights
         if selected_segment == "Young & Credit Newbies":
             st.info("""
-            ### Young & Credit Newbies
-            - **Profile**: Typically younger customers (average age 24) with no credit history
-            - **Behavior**: Lower average monthly spend (€350) but good growth potential
-            - **Key Value**: First credit product, opportunity for long-term relationship
-            - **Challenge**: Medium churn risk, need for financial education
-            - **Opportunity**: High upsell potential as income and financial needs grow
+            ### Giovani & Nuovi al Credito
+            - **Profilo**: Clienti tipicamente più giovani (età media 24) senza storia creditizia
+            - **Comportamento**: Spesa media mensile inferiore (€350) ma buon potenziale di crescita
+            - **Valore Chiave**: Primo prodotto di credito, opportunità di relazione a lungo termine
+            - **Sfida**: Rischio medio di abbandono, necessità di educazione finanziaria
+            - **Opportunità**: Alto potenziale di upsell con l'aumento del reddito e delle esigenze finanziarie
             """)
             
         elif selected_segment == "Credit Rebuilders":
             st.info("""
-            ### Credit Rebuilders
-            - **Profile**: Customers with past credit issues seeking to rebuild their credit history
-            - **Behavior**: Moderate spending (€500/month) with disciplined payment patterns
-            - **Key Value**: Highly engaged with product features related to credit improvement
-            - **Challenge**: Need for transparent credit improvement path
-            - **Opportunity**: Medium upsell potential but high loyalty if well-served
+            ### Ricostruttori del Credito
+            - **Profilo**: Clienti con problemi creditizi passati che cercano di ricostruire la propria storia creditizia
+            - **Comportamento**: Spesa moderata (€500/mese) con modelli di pagamento disciplinati
+            - **Valore Chiave**: Altamente coinvolti con funzionalità del prodotto relative al miglioramento del credito
+            - **Sfida**: Necessità di un percorso trasparente di miglioramento del credito
+            - **Opportunità**: Potenziale di upsell medio ma alta fedeltà se ben serviti
             """)
             
         elif selected_segment == "New Immigrants/Expats":
             st.info("""
-            ### New Immigrants/Expats
-            - **Profile**: Recently relocated customers without local credit history
-            - **Behavior**: Higher spending patterns (€650/month) but higher volatility
-            - **Key Value**: Access to credit services unavailable through traditional channels
-            - **Challenge**: High churn risk due to potential relocation or banking alternatives
-            - **Opportunity**: Medium upsell potential, especially for cross-border services
+            ### Nuovi Immigrati/Espatriati
+            - **Profilo**: Clienti recentemente trasferiti senza storia creditizia locale
+            - **Comportamento**: Modelli di spesa più elevati (€650/mese) ma con maggiore volatilità
+            - **Valore Chiave**: Accesso a servizi di credito non disponibili attraverso canali tradizionali
+            - **Sfida**: Alto rischio di abbandono a causa di potenziali trasferimenti o alternative bancarie
+            - **Opportunità**: Potenziale di upsell medio, specialmente per servizi transfrontalieri
             """)
             
         elif selected_segment == "Self-Employed/Thin File":
             st.info("""
-            ### Self-Employed/Thin File
-            - **Profile**: Self-employed professionals or business owners with limited formal credit history
-            - **Behavior**: Highest average monthly spend (€750) but may be more sensitive to fees
-            - **Key Value**: Business-related spending capability despite limited traditional documentation
-            - **Challenge**: Medium churn risk if they qualify for traditional business credit
-            - **Opportunity**: High upsell potential for business-related financial products
+            ### Lavoratori Autonomi/File Sottile
+            - **Profilo**: Professionisti autonomi o proprietari di attività con storia creditizia formale limitata
+            - **Comportamento**: Spesa media mensile più alta (€750) ma maggiore sensibilità alle commissioni
+            - **Valore Chiave**: Capacità di spesa legata all'attività nonostante documentazione tradizionale limitata
+            - **Sfida**: Rischio medio di abbandono se qualificati per credito aziendale tradizionale
+            - **Opportunità**: Alto potenziale di upsell per prodotti finanziari legati all'attività
             """)
             
         elif selected_segment == "Risk-Averse Consumers":
             st.info("""
-            ### Risk-Averse Consumers
-            - **Profile**: Financially conservative customers who prefer the security of a guaranteed card
-            - **Behavior**: Lower spending (€400/month) with cautious usage patterns
-            - **Key Value**: Security and predictability of the secured model
-            - **Challenge**: Low upsell potential due to risk aversion
-            - **Opportunity**: Lowest churn risk, providing a stable customer base
+            ### Consumatori Avversi al Rischio
+            - **Profilo**: Clienti finanziariamente conservativi che preferiscono la sicurezza di una carta garantita
+            - **Comportamento**: Spesa inferiore (€400/mese) con modelli di utilizzo cauti
+            - **Valore Chiave**: Sicurezza e prevedibilità del modello garantito
+            - **Sfida**: Basso potenziale di upsell a causa dell'avversione al rischio
+            - **Opportunità**: Rischio di abbandono più basso, fornendo una base clienti stabile
             """)
     
     with tabs[3]:
-        st.subheader("Strategic Implications & Recommendations")
+        st.subheader("Implicazioni Strategiche & Raccomandazioni")
         
         # Display strategic recommendations based on segmentation
         st.markdown("""
-        ### Overall Strategic Recommendations
+        ### Raccomandazioni Strategiche Generali
         
-        Based on the customer segmentation analysis, we recommend the following strategic actions:
+        Sulla base dell'analisi di segmentazione dei clienti, raccomandiamo le seguenti azioni strategiche:
         """)
         
         col1, col2 = st.columns(2)
         
         with col1:
-            st.subheader("Marketing & Acquisition")
+            st.subheader("Marketing & Acquisizione")
             st.markdown("""
-            - **Targeted Campaigns**: Create segment-specific marketing messages
-            - **Channel Strategy**: Use digital channels for younger segments; partner with immigrant services for expats
-            - **Value Proposition**: Emphasize different benefits for each segment (credit building, premium features, deposit interest)
-            - **Collaborator Training**: Equip collaborators with segment-specific selling points
+            - **Campagne Mirate**: Creare messaggi di marketing specifici per ogni segmento
+            - **Strategia di Canale**: Utilizzare canali digitali per i segmenti più giovani; collaborare con servizi per immigrati per gli espatriati
+            - **Proposta di Valore**: Enfatizzare diversi benefici per ogni segmento (costruzione del credito, funzionalità premium, interesse sui depositi)
+            - **Formazione Collaboratori**: Dotare i collaboratori di argomenti di vendita specifici per segmento
             """)
             
-            st.subheader("Product Enhancement")
+            st.subheader("Miglioramento del Prodotto")
             st.markdown("""
-            - **Segment-Specific Features**: Develop features that address specific segment needs
-            - **Tiered Offering**: Consider creating multiple card tiers to better serve different segments
-            - **Mobile Experience**: Enhance digital experience for younger, tech-savvy segments
-            - **Financial Education**: Provide resources for credit newbies and rebuilders
+            - **Funzionalità Specifiche per Segmento**: Sviluppare funzionalità che soddisfino le esigenze specifiche di ogni segmento
+            - **Offerta a Livelli**: Considerare la creazione di più livelli di carte per servire meglio i diversi segmenti
+            - **Esperienza Mobile**: Migliorare l'esperienza digitale per i segmenti più giovani e tecnologicamente competenti
+            - **Educazione Finanziaria**: Fornire risorse per i nuovi al credito e i ricostruttori
             """)
         
         with col2:
-            st.subheader("Customer Retention")
+            st.subheader("Fidelizzazione Clienti")
             st.markdown("""
-            - **Segment-Based Engagement**: Customize communication frequency and content
-            - **Targeted Retention Offers**: Create specific offers for high-churn-risk segments
-            - **Milestone Rewards**: Celebrate credit improvement milestones for rebuilders
-            - **Loyalty Program**: Design rewards that appeal to segment-specific spending patterns
+            - **Coinvolgimento Basato sul Segmento**: Personalizzare frequenza e contenuto delle comunicazioni
+            - **Offerte di Fidelizzazione Mirate**: Creare offerte specifiche per segmenti ad alto rischio di abbandono
+            - **Premi per Traguardi**: Celebrare i traguardi di miglioramento del credito per i ricostruttori
+            - **Programma Fedeltà**: Progettare premi che si adattino ai modelli di spesa specifici di ogni segmento
             """)
             
-            st.subheader("Growth Opportunities")
+            st.subheader("Opportunità di Crescita")
             st.markdown("""
-            - **Cross-Selling Strategy**: Develop tailored financial products for each segment
-            - **Upgrade Paths**: Create clear paths to unsecured credit products for eligible customers
-            - **Geographic Expansion**: Target regions with higher concentrations of key segments
-            - **New Segment Development**: Explore untapped segments like students or seniors
+            - **Strategia di Cross-Selling**: Sviluppare prodotti finanziari su misura per ogni segmento
+            - **Percorsi di Upgrade**: Creare percorsi chiari verso prodotti di credito non garantiti per clienti idonei
+            - **Espansione Geografica**: Rivolgersi a regioni con maggiore concentrazione di segmenti chiave
+            - **Sviluppo Nuovi Segmenti**: Esplorare segmenti non sfruttati come studenti o anziani
             """)
         
         # Year-specific strategic focus
-        st.subheader(f"Strategic Focus for {selected_year}")
+        st.subheader(f"Focus Strategico per il {selected_year}")
         
         if selected_year == 2023:
             st.info("""
-            ### Year 1 (2023) Strategic Focus
-            - Establish product foundation with focus on Young & Credit Newbies and Credit Rebuilders
-            - Build operational capacity and refine onboarding process
-            - Develop initial segment-based marketing approach
-            - Focus on activation rates and initial customer satisfaction
+            ### Focus Strategico Anno 1 (2023)
+            - Stabilire le basi del prodotto con focus su Giovani & Nuovi al Credito e Ricostruttori del Credito
+            - Costruire capacità operativa e perfezionare il processo di onboarding
+            - Sviluppare l'approccio iniziale di marketing basato sui segmenti
+            - Concentrarsi sui tassi di attivazione e sulla soddisfazione iniziale dei clienti
             """)
         elif selected_year == 2024:
             st.info("""
-            ### Year 2 (2024) Strategic Focus
-            - Expand market reach with targeted focus on growing Expat segment
-            - Enhance retention strategies for first-year customers
-            - Develop more sophisticated segment-based communication
-            - Begin testing upgrade paths for successful customers
+            ### Focus Strategico Anno 2 (2024)
+            - Espandere la portata di mercato con un focus mirato sul segmento Espatriati in crescita
+            - Potenziare le strategie di fidelizzazione per i clienti del primo anno
+            - Sviluppare comunicazioni più sofisticate basate sui segmenti
+            - Iniziare a testare percorsi di upgrade per i clienti di successo
             """)
         elif selected_year == 2025:
             st.info("""
-            ### Year 3 (2025) Strategic Focus
-            - Optimize segment mix to maximize profitability
-            - Implement advanced loyalty and retention programs
-            - Develop complementary products for most profitable segments
-            - Scale successful segment strategies while phasing out underperforming ones
+            ### Focus Strategico Anno 3 (2025)
+            - Ottimizzare il mix di segmenti per massimizzare la redditività
+            - Implementare programmi avanzati di fidelizzazione e retention
+            - Sviluppare prodotti complementari per i segmenti più redditizi
+            - Espandere le strategie di segmento di successo eliminando gradualmente quelle con performance insufficienti
             """)
 
 if __name__ == "__main__":
