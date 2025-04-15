@@ -54,9 +54,9 @@ def create_cards_distribution_chart(data):
         go.Bar(
             x=data['date'],
             y=data['new_cards'],
-            name="New Cards",
+            name="Nuove Carte",
             marker_color='rgba(55, 83, 109, 0.7)',
-            hovertemplate='%{y:.0f} new cards',
+            hovertemplate='%{y:.0f} nuove carte',
         ),
         secondary_y=False,
     )
@@ -66,17 +66,17 @@ def create_cards_distribution_chart(data):
         go.Scatter(
             x=data['date'],
             y=data['active_cards'],
-            name="Active Cards",
+            name="Carte Attive",
             marker_color='rgb(26, 118, 255)',
             mode='lines',
-            hovertemplate='%{y:.0f} active cards',
+            hovertemplate='%{y:.0f} carte attive',
         ),
         secondary_y=True,
     )
     
     # Customize layout
     fig.update_layout(
-        title="Card Distribution and Active Cards Over Time",
+        title="Distribuzione delle Carte e Carte Attive nel Tempo",
         hovermode="x unified",
         legend=dict(
             orientation="h",
@@ -89,9 +89,9 @@ def create_cards_distribution_chart(data):
     )
     
     # Set axis titles
-    fig.update_yaxes(title_text="New Cards Distributed", secondary_y=False)
-    fig.update_yaxes(title_text="Total Active Cards", secondary_y=True)
-    fig.update_xaxes(title_text="Date")
+    fig.update_yaxes(title_text="Nuove Carte Distribuite", secondary_y=False)
+    fig.update_yaxes(title_text="Totale Carte Attive", secondary_y=True)
+    fig.update_xaxes(title_text="Data")
     
     return fig
 
@@ -104,7 +104,7 @@ def create_financial_overview_chart(data):
         go.Bar(
             x=data['date'],
             y=data['total_revenue'],
-            name="Total Revenue",
+            name="Ricavi Totali",
             marker_color='rgba(26, 118, 255, 0.7)',
             hovertemplate='€%{y:.2f}',
         ),
@@ -116,7 +116,7 @@ def create_financial_overview_chart(data):
         go.Bar(
             x=data['date'],
             y=data['total_costs'],
-            name="Total Costs",
+            name="Costi Totali",
             marker_color='rgba(255, 99, 71, 0.7)',
             hovertemplate='€%{y:.2f}',
         ),
@@ -128,7 +128,7 @@ def create_financial_overview_chart(data):
         go.Scatter(
             x=data['date'],
             y=data['profit'],
-            name="Monthly Profit",
+            name="Profitto Mensile",
             marker_color='rgb(0, 128, 0)',
             mode='lines',
             hovertemplate='€%{y:.2f}',
@@ -141,7 +141,7 @@ def create_financial_overview_chart(data):
         go.Scatter(
             x=data['date'],
             y=data['cumulative_profit'],
-            name="Cumulative Profit",
+            name="Profitto Cumulativo",
             marker_color='rgb(128, 0, 128)',
             mode='lines',
             hovertemplate='€%{y:.2f}',
@@ -152,7 +152,7 @@ def create_financial_overview_chart(data):
     
     # Customize layout
     fig.update_layout(
-        title="Financial Overview",
+        title="Panoramica Finanziaria",
         hovermode="x unified",
         legend=dict(
             orientation="h",
@@ -166,9 +166,9 @@ def create_financial_overview_chart(data):
     )
     
     # Set axis titles
-    fig.update_yaxes(title_text="Revenue & Costs (€)", secondary_y=False)
-    fig.update_yaxes(title_text="Profit (€)", secondary_y=True)
-    fig.update_xaxes(title_text="Date")
+    fig.update_yaxes(title_text="Ricavi & Costi (€)", secondary_y=False)
+    fig.update_yaxes(title_text="Profitto (€)", secondary_y=True)
+    fig.update_xaxes(title_text="Data")
     
     return fig
 
@@ -178,7 +178,7 @@ def create_revenue_breakdown_chart(data):
     upfront_total = data['upfront_fee_revenue'].sum()
     interchange_total = data['interchange_revenue'].sum()
     
-    labels = ['Activation Fee Revenue', 'Interchange Revenue']
+    labels = ['Ricavi Commissioni di Attivazione', 'Ricavi Interchange']
     values = [upfront_total, interchange_total]
     
     # Create pie chart
@@ -191,7 +191,7 @@ def create_revenue_breakdown_chart(data):
     )])
     
     fig.update_layout(
-        title="Revenue Breakdown by Source",
+        title="Ripartizione dei Ricavi per Fonte",
         margin=dict(l=10, r=10, t=60, b=10),
     )
     
@@ -219,9 +219,9 @@ def create_segment_distribution_chart(segmentation_data):
     
     # Customize layout
     fig.update_layout(
-        title="Customer Segment Distribution by Year",
-        xaxis_title="Year",
-        yaxis_title="Percentage (%)",
+        title="Distribuzione dei Segmenti di Clientela per Anno",
+        xaxis_title="Anno",
+        yaxis_title="Percentuale (%)",
         hovermode="x unified",
         legend=dict(
             orientation="h",
@@ -264,14 +264,14 @@ def create_segment_characteristics_chart(segmentation_data):
                 0.33 if characteristics[segment]['churn_risk'] == "Low" else (0.67 if characteristics[segment]['churn_risk'] == "Medium" else 1.0),
                 0.33 if characteristics[segment]['upsell_potential'] == "Low" else (0.67 if characteristics[segment]['upsell_potential'] == "Medium" else 1.0)
             ],
-            theta=['Avg Age', 'Avg Deposit', 'Avg Monthly Spend', 'Churn Risk', 'Upsell Potential'],
+            theta=['Età Media', 'Deposito Medio', 'Spesa Media Mensile', 'Rischio Abbandono', 'Potenziale Upsell'],
             fill='toself',
             name=segment,
             hovertemplate='%{theta}: %{r:.2f}'
         ))
     
     fig.update_layout(
-        title="Segment Characteristics Comparison",
+        title="Confronto Caratteristiche dei Segmenti",
         polar=dict(
             radialaxis=dict(
                 visible=True,
@@ -298,7 +298,7 @@ def create_activation_rate_chart(data):
         x=activation_data['date'],
         y=activation_data['activation_rate'],
         mode='lines',
-        name='Activation Rate',
+        name='Tasso di Attivazione',
         line=dict(color='rgb(26, 118, 255)', width=3),
         hovertemplate='%{y:.2%}'
     ))
@@ -308,16 +308,16 @@ def create_activation_rate_chart(data):
         x=[activation_data['date'].min(), activation_data['date'].max()],
         y=[0.9, 0.9],
         mode='lines',
-        name='Target (90%)',
+        name='Obiettivo (90%)',
         line=dict(color='green', width=2, dash='dash'),
-        hovertemplate='Target: 90%'
+        hovertemplate='Obiettivo: 90%'
     ))
     
     # Customize layout
     fig.update_layout(
-        title="Card Activation Rate Over Time",
-        xaxis_title="Date",
-        yaxis_title="Activation Rate",
+        title="Tasso di Attivazione Carte nel Tempo",
+        xaxis_title="Data",
+        yaxis_title="Tasso di Attivazione",
         yaxis_tickformat='.0%',
         hovermode="x unified",
         legend=dict(

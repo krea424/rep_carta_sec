@@ -6,40 +6,40 @@ import plotly.graph_objects as go
 from utils.visualization import create_segment_distribution_chart, create_segment_characteristics_chart
 
 st.set_page_config(
-    page_title="Customer Segments | FinEu Dashboard",
+    page_title="Segmenti Clientela | FinEu Dashboard",
     page_icon="💳",
     layout="wide"
 )
 
 def main():
-    st.title("Customer Segmentation Analysis")
+    st.title("Analisi Segmentazione Clientela")
     
     if 'data_initialized' not in st.session_state or not st.session_state.data_initialized:
-        st.warning("Data not initialized. Please return to the home page.")
+        st.warning("Dati non inizializzati. Si prega di tornare alla pagina principale.")
         return
     
     if 'segmentation_data' not in st.session_state:
-        st.error("Segmentation data not available.")
+        st.error("Dati di segmentazione non disponibili.")
         return
     
     segmentation_data = st.session_state.segmentation_data
     
     # Sidebar year selection
-    st.sidebar.header("Filters")
+    st.sidebar.header("Filtri")
     
     years = [2023, 2024, 2025]
     selected_year = st.sidebar.selectbox(
-        "Select Year for Detailed Analysis",
+        "Seleziona Anno per Analisi Dettagliata",
         options=years,
         index=len(years)-1  # Default to latest year
     )
     
     # Create tabs for different analyses
     tabs = st.tabs([
-        "Segment Overview", 
-        "Detailed Segmentation",
-        "Segment Characteristics", 
-        "Strategic Implications"
+        "Panoramica Segmenti", 
+        "Segmentazione Dettagliata",
+        "Caratteristiche Segmenti", 
+        "Implicazioni Strategiche"
     ])
     
     with tabs[0]:
