@@ -136,7 +136,7 @@ def main():
         }))
     
     with tab3:
-        st.subheader("Card Activation Analysis")
+        st.subheader("Analisi Attivazione Carte")
         
         # Display activation rate chart
         activation_chart = create_activation_rate_chart(filtered_data)
@@ -146,7 +146,7 @@ def main():
         col1, col2 = st.columns(2)
         
         with col1:
-            st.subheader("Activation Metrics")
+            st.subheader("Metriche di Attivazione")
             
             # Calculate metrics
             if not filtered_data.empty:
@@ -155,37 +155,37 @@ def main():
                 overall_rate = latest_active / total_issued if total_issued > 0 else 0
                 
                 # Display metrics
-                st.metric("Overall Activation Rate", f"{overall_rate:.2%}")
+                st.metric("Tasso di Attivazione Complessivo", f"{overall_rate:.2%}")
                 
                 # Calculate target gap
                 target_gap = (0.90 - overall_rate) * 100
                 if target_gap > 0:
-                    st.metric("Gap to Target (90%)", f"{target_gap:.2%}", delta_color="inverse")
+                    st.metric("Divario dall'Obiettivo (90%)", f"{target_gap:.2%}", delta_color="inverse")
                 else:
-                    st.metric("Exceeding Target (90%)", f"{-target_gap:.2%}")
+                    st.metric("Superamento Obiettivo (90%)", f"{-target_gap:.2%}")
                 
                 # Calculate inactive cards
                 inactive_cards = total_issued - latest_active
-                st.metric("Inactive Cards", f"{inactive_cards:,.0f}")
+                st.metric("Carte Inattive", f"{inactive_cards:,.0f}")
             else:
-                st.info("No data available for selected period.")
+                st.info("Nessun dato disponibile per il periodo selezionato.")
         
         with col2:
-            st.subheader("Activation Rates by Year")
+            st.subheader("Tassi di Attivazione per Anno")
             
             # Calculate activation rates by year
             yearly_activation = filtered_data.groupby('year').apply(
                 lambda x: x.iloc[-1]['active_cards'] / x['new_cards'].sum() if x['new_cards'].sum() > 0 else 0
             ).reset_index()
-            yearly_activation.columns = ['Year', 'Activation Rate']
+            yearly_activation.columns = ['Anno', 'Tasso di Attivazione']
             
             # Create bar chart
             fig = px.bar(
                 yearly_activation,
-                x='Year',
-                y='Activation Rate',
+                x='Anno',
+                y='Tasso di Attivazione',
                 text_auto='.2%',
-                color='Activation Rate',
+                color='Tasso di Attivazione',
                 color_continuous_scale=px.colors.sequential.Blues
             )
             
@@ -197,7 +197,7 @@ def main():
             st.plotly_chart(fig, use_container_width=True)
     
     with tab4:
-        st.subheader("Card Distribution Patterns")
+        st.subheader("Modelli di Distribuzione delle Carte")
         
         # Create line chart showing cumulative cards over time
         filtered_data['cumulative_new_cards'] = filtered_data['new_cards'].cumsum()
@@ -208,7 +208,7 @@ def main():
             x=filtered_data['date'],
             y=filtered_data['cumulative_new_cards'],
             mode='lines',
-            name='Cumulative New Cards',
+            name='Nuove Carte Cumulative',
             line=dict(color='blue', width=3)
         ))
         
@@ -216,7 +216,7 @@ def main():
             x=filtered_data['date'],
             y=filtered_data['active_cards'],
             mode='lines',
-            name='Active Cards',
+            name='Carte Attive',
             line=dict(color='green', width=3)
         ))
         
@@ -229,14 +229,14 @@ def main():
                 x=x_vals,
                 y=y_vals,
                 mode='lines',
-                name='Target Distribution',
+                name='Obiettivo Distribuzione',
                 line=dict(color='red', width=2, dash='dash')
             ))
         
         fig.update_layout(
-            title="Cumulative Cards Distribution Over Time",
-            xaxis_title="Date",
-            yaxis_title="Number of Cards",
+            title="Distribuzione Cumulativa Carte nel Tempo",
+            xaxis_title="Data",
+            yaxis_title="Numero di Carte",
             legend=dict(
                 orientation="h",
                 yanchor="bottom",
@@ -249,7 +249,7 @@ def main():
         st.plotly_chart(fig, use_container_width=True)
         
         # Add growth rate analysis
-        st.subheader("Growth Rate Analysis")
+        st.subheader("Analisi Tasso di Crescita")
         
         # Calculate month-over-month growth rates for active cards
         filtered_data['mom_growth'] = filtered_data['active_cards'].pct_change() * 100
@@ -262,12 +262,12 @@ def main():
             color='mom_growth',
             color_continuous_scale=px.colors.diverging.RdBu,
             color_continuous_midpoint=0,
-            title="Month-over-Month Growth Rate (Active Cards)"
+            title="Tasso di Crescita Mese su Mese (Carte Attive)"
         )
         
         fig.update_layout(
-            xaxis_title="Date",
-            yaxis_title="Growth Rate (%)",
+            xaxis_title="Data",
+            yaxis_title="Tasso di Crescita (%)",
             yaxis_tickformat='.1f',
         )
         

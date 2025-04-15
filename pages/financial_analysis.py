@@ -12,60 +12,60 @@ from utils.financial_models import (
 )
 
 st.set_page_config(
-    page_title="Financial Analysis | FinEu Dashboard",
+    page_title="Analisi Finanziaria | FinEu Dashboard",
     page_icon="💳",
     layout="wide"
 )
 
 def main():
-    st.title("Financial Analysis & Projections")
+    st.title("Analisi Finanziaria & Proiezioni")
     
     if 'data_initialized' not in st.session_state or not st.session_state.data_initialized:
-        st.warning("Data not initialized. Please return to the home page.")
+        st.warning("Dati non inizializzati. Si prega di tornare alla pagina principale.")
         return
     
     if 'financial_data' not in st.session_state:
-        st.error("Financial data not available.")
+        st.error("Dati finanziari non disponibili.")
         return
     
     financial_data = st.session_state.financial_data
     
     # Create tabs for different analyses
     tabs = st.tabs([
-        "Financial Overview", 
-        "Revenue Analysis", 
-        "Scenario Modeling",
-        "Sensitivity Analysis"
+        "Panoramica Finanziaria", 
+        "Analisi Ricavi", 
+        "Modellazione Scenari",
+        "Analisi di Sensibilità"
     ])
     
     with tabs[0]:
-        st.subheader("Financial Performance Overview")
+        st.subheader("Panoramica Performance Finanziaria")
         
         # KPI metrics in 4 columns
         col1, col2, col3, col4 = st.columns(4)
         
         with col1:
             total_revenue = financial_data['total_revenue'].sum()
-            st.metric("Total Revenue", f"€{total_revenue:,.2f}")
+            st.metric("Ricavi Totali", f"€{total_revenue:,.2f}")
         
         with col2:
             total_costs = financial_data['total_costs'].sum()
-            st.metric("Total Costs", f"€{total_costs:,.2f}")
+            st.metric("Costi Totali", f"€{total_costs:,.2f}")
         
         with col3:
             total_profit = financial_data['profit'].sum()
-            st.metric("Total Profit", f"€{total_profit:,.2f}")
+            st.metric("Profitto Totale", f"€{total_profit:,.2f}")
         
         with col4:
             profit_margin = total_profit / total_revenue if total_revenue > 0 else 0
-            st.metric("Profit Margin", f"{profit_margin:.2%}")
+            st.metric("Margine di Profitto", f"{profit_margin:.2%}")
         
         # Financial overview chart
         financial_chart = create_financial_overview_chart(financial_data)
         st.plotly_chart(financial_chart, use_container_width=True)
         
         # Annual financial summary
-        st.subheader("Annual Financial Summary")
+        st.subheader("Riepilogo Finanziario Annuale")
         annual_summary = financial_data.groupby('year').agg({
             'total_revenue': 'sum',
             'total_costs': 'sum',
@@ -76,17 +76,20 @@ def main():
         # Calculate return on investment
         annual_summary['roi'] = annual_summary['profit'] / annual_summary['total_costs']
         
+        # Format table and rename columns
+        annual_summary.columns = ['Anno', 'Ricavi Totali', 'Costi Totali', 'Profitto', 'Carte Attive', 'ROI']
+        
         # Format table
         st.dataframe(annual_summary.style.format({
-            'total_revenue': '€{:,.2f}',
-            'total_costs': '€{:,.2f}',
-            'profit': '€{:,.2f}',
-            'active_cards': '{:,.0f}',
-            'roi': '{:.2%}'
+            'Ricavi Totali': '€{:,.2f}',
+            'Costi Totali': '€{:,.2f}',
+            'Profitto': '€{:,.2f}',
+            'Carte Attive': '{:,.0f}',
+            'ROI': '{:.2%}'
         }))
     
     with tabs[1]:
-        st.subheader("Revenue Analysis")
+        st.subheader("Analisi dei Ricavi")
         
         # Revenue breakdown by source
         col1, col2 = st.columns([2, 1])
@@ -100,21 +103,21 @@ def main():
             fig.add_trace(go.Bar(
                 x=revenue_data['date'],
                 y=revenue_data['upfront_fee_revenue'],
-                name='Activation Fee Revenue',
+                name='Ricavi da Commissioni di Attivazione',
                 marker_color='rgba(26, 118, 255, 0.7)'
             ))
             
             fig.add_trace(go.Bar(
                 x=revenue_data['date'],
                 y=revenue_data['interchange_revenue'],
-                name='Interchange Revenue',
+                name='Ricavi da Interchange',
                 marker_color='rgba(55, 83, 109, 0.7)'
             ))
             
             fig.update_layout(
-                title="Monthly Revenue by Source",
-                xaxis_title="Date",
-                yaxis_title="Revenue (€)",
+                title="Ricavi Mensili per Fonte",
+                xaxis_title="Data",
+                yaxis_title="Ricavi (€)",
                 barmode='stack',
                 legend=dict(
                     orientation="h",
@@ -133,7 +136,7 @@ def main():
             st.plotly_chart(revenue_breakdown, use_container_width=True)
         
         # Revenue per card metrics
-        st.subheader("Revenue Per Card Metrics")
+        st.subheader("Metriche di Ricavo per Carta")
         
         col1, col2 = st.columns(2)
         
@@ -147,14 +150,14 @@ def main():
                 x=revenue_data['date'],
                 y=revenue_data['revenue_per_active_card'],
                 mode='lines',
-                name='Revenue per Active Card',
+                name='Ricavo per Carta Attiva',
                 line=dict(color='green', width=3)
             ))
             
             fig.update_layout(
-                title="Monthly Revenue per Active Card",
-                xaxis_title="Date",
-                yaxis_title="Revenue per Card (€)"
+                title="Ricavo Mensile per Carta Attiva",
+                xaxis_title="Data",
+                yaxis_title="Ricavo per Carta (€)"
             )
             
             st.plotly_chart(fig, use_container_width=True)
@@ -173,48 +176,48 @@ def main():
                 x='year',
                 y='annual_revenue_per_card',
                 text_auto='.2f',
-                title="Annual Revenue per Card",
-                labels={'annual_revenue_per_card': 'Revenue per Card (€)', 'year': 'Year'}
+                title="Ricavo Annuale per Carta",
+                labels={'annual_revenue_per_card': 'Ricavo per Carta (€)', 'year': 'Anno'}
             )
             
             st.plotly_chart(fig, use_container_width=True)
     
     with tabs[2]:
-        st.subheader("Financial Scenario Modeling")
+        st.subheader("Modellazione Scenari Finanziari")
         
         # Form for scenario parameters
         with st.form("scenario_form"):
-            st.markdown("#### Configure Scenario Parameters")
+            st.markdown("#### Configura Parametri Scenario")
             
             col1, col2, col3 = st.columns(3)
             
             with col1:
-                yearly_new_cards = st.number_input("Yearly New Cards", min_value=100, max_value=5000, value=1000, step=100)
-                activation_rate = st.slider("Activation Rate", min_value=0.5, max_value=1.0, value=0.9, step=0.01, format="%.2f")
-                churn_rate = st.slider("Annual Churn Rate", min_value=0.05, max_value=0.3, value=0.15, step=0.01, format="%.2f")
+                yearly_new_cards = st.number_input("Nuove Carte Annuali", min_value=100, max_value=5000, value=1000, step=100)
+                activation_rate = st.slider("Tasso di Attivazione", min_value=0.5, max_value=1.0, value=0.9, step=0.01, format="%.2f")
+                churn_rate = st.slider("Tasso di Abbandono Annuale", min_value=0.05, max_value=0.3, value=0.15, step=0.01, format="%.2f")
             
             with col2:
-                upfront_fee = st.number_input("Upfront Fee (€)", min_value=0, max_value=200, value=90, step=10)
-                interchange_rate = st.slider("Interchange Rate (%)", min_value=0.05, max_value=0.2, value=0.1, step=0.01, format="%.2f%%") / 100
-                avg_monthly_spend = st.number_input("Avg Monthly Spend (€)", min_value=100, max_value=1000, value=450, step=50)
+                upfront_fee = st.number_input("Commissione Iniziale (€)", min_value=0, max_value=200, value=90, step=10)
+                interchange_rate = st.slider("Tasso di Interchange (%)", min_value=0.05, max_value=0.2, value=0.1, step=0.01, format="%.2f%%") / 100
+                avg_monthly_spend = st.number_input("Spesa Media Mensile (€)", min_value=100, max_value=1000, value=450, step=50)
             
             with col3:
-                acquisition_cost = st.number_input("Customer Acquisition Cost (€)", min_value=10, max_value=200, value=50, step=10)
-                operational_cost = st.number_input("Annual Operational Cost (€)", min_value=50, max_value=300, value=150, step=10)
-                years = st.slider("Projection Years", min_value=1, max_value=5, value=3)
+                acquisition_cost = st.number_input("Costo Acquisizione Cliente (€)", min_value=10, max_value=200, value=50, step=10)
+                operational_cost = st.number_input("Costo Operativo Annuale (€)", min_value=50, max_value=300, value=150, step=10)
+                years = st.slider("Anni di Proiezione", min_value=1, max_value=5, value=3)
             
-            submit_button = st.form_submit_button("Run Scenario")
+            submit_button = st.form_submit_button("Esegui Scenario")
         
         # Initialize or update scenarios
         if 'scenarios' not in st.session_state:
             st.session_state.scenarios = {}
             
             # Add base scenario
-            st.session_state.scenarios["Base Case"] = run_financial_scenario()
+            st.session_state.scenarios["Caso Base"] = run_financial_scenario()
         
         # Run new scenario when submitted
         if submit_button:
-            scenario_name = "Custom Scenario"
+            scenario_name = "Scenario Personalizzato"
             
             st.session_state.scenarios[scenario_name] = run_financial_scenario(
                 years=years,
@@ -228,7 +231,7 @@ def main():
                 operational_cost=operational_cost
             )
             
-            st.success(f"Scenario '{scenario_name}' has been calculated.")
+            st.success(f"Lo scenario '{scenario_name}' è stato calcolato.")
         
         # Display scenario comparison
         if 'scenarios' in st.session_state and len(st.session_state.scenarios) > 0:
@@ -242,37 +245,37 @@ def main():
             for name, scenario in st.session_state.scenarios.items():
                 summary = {
                     'Scenario': name,
-                    'Total Revenue': scenario['monthly']['total_revenue'].sum(),
-                    'Total Costs': scenario['monthly']['total_costs'].sum(),
-                    'Total Profit': scenario['monthly']['profit'].sum(),
+                    'Ricavi Totali': scenario['monthly']['total_revenue'].sum(),
+                    'Costi Totali': scenario['monthly']['total_costs'].sum(),
+                    'Profitto Totale': scenario['monthly']['profit'].sum(),
                     'ROI': scenario['roi'],
-                    'Breakeven Month': scenario['breakeven_month'].strftime('%Y-%m') if scenario['breakeven_month'] is not None else 'N/A'
+                    'Mese di Pareggio': scenario['breakeven_month'].strftime('%Y-%m') if scenario['breakeven_month'] is not None else 'N/D'
                 }
                 scenario_summary.append(summary)
             
             summary_df = pd.DataFrame(scenario_summary)
             
-            st.subheader("Scenario Comparison Summary")
+            st.subheader("Riepilogo Comparativo Scenari")
             st.dataframe(summary_df.style.format({
-                'Total Revenue': '€{:,.2f}',
-                'Total Costs': '€{:,.2f}',
-                'Total Profit': '€{:,.2f}',
+                'Ricavi Totali': '€{:,.2f}',
+                'Costi Totali': '€{:,.2f}',
+                'Profitto Totale': '€{:,.2f}',
                 'ROI': '{:.2%}'
             }))
             
             # Option to clear scenarios
-            if st.button("Clear Custom Scenarios"):
-                default_scenario = st.session_state.scenarios.get("Base Case", None)
-                st.session_state.scenarios = {"Base Case": default_scenario} if default_scenario else {}
-                st.info("Custom scenarios cleared. Base case retained.")
+            if st.button("Cancella Scenari Personalizzati"):
+                default_scenario = st.session_state.scenarios.get("Caso Base", None)
+                st.session_state.scenarios = {"Caso Base": default_scenario} if default_scenario else {}
+                st.info("Scenari personalizzati cancellati. Caso base mantenuto.")
                 st.rerun()
     
     with tabs[3]:
-        st.subheader("Sensitivity Analysis")
+        st.subheader("Analisi di Sensibilità")
         
         # Parameters to analyze
         parameter_options = {
-            "Yearly New Cards": {
+            "Nuove Carte Annuali": {
                 "param": "yearly_new_cards",
                 "min": 500,
                 "max": 1500,
@@ -280,7 +283,7 @@ def main():
                 "default": 1000,
                 "format": "{}"
             },
-            "Activation Rate": {
+            "Tasso di Attivazione": {
                 "param": "activation_rate",
                 "min": 0.7,
                 "max": 1.0,
@@ -288,7 +291,7 @@ def main():
                 "default": 0.9,
                 "format": "{:.2f}"
             },
-            "Churn Rate": {
+            "Tasso di Abbandono": {
                 "param": "churn_rate",
                 "min": 0.05,
                 "max": 0.25,
@@ -296,7 +299,7 @@ def main():
                 "default": 0.15,
                 "format": "{:.2f}"
             },
-            "Upfront Fee": {
+            "Commissione Iniziale": {
                 "param": "upfront_fee",
                 "min": 50,
                 "max": 150,
@@ -304,7 +307,7 @@ def main():
                 "default": 90,
                 "format": "€{}"
             },
-            "Average Monthly Spend": {
+            "Spesa Media Mensile": {
                 "param": "avg_monthly_spend",
                 "min": 250,
                 "max": 650,
@@ -316,7 +319,7 @@ def main():
         
         # Parameter selection
         selected_param = st.selectbox(
-            "Select Parameter for Sensitivity Analysis",
+            "Seleziona Parametro per Analisi di Sensibilità",
             options=list(parameter_options.keys())
         )
         
@@ -353,7 +356,7 @@ def main():
         st.plotly_chart(sensitivity_chart, use_container_width=True)
         
         # Display data table
-        st.subheader("Sensitivity Analysis Results")
+        st.subheader("Risultati Analisi di Sensibilità")
         
         # Format the parameter values
         sensitivity_results['parameter_value_formatted'] = sensitivity_results['parameter_value'].apply(
@@ -380,19 +383,19 @@ def main():
         
         display_df.columns = [
             selected_param, 
-            'Total Profit', 
-            'Change from Baseline', 
+            'Profitto Totale', 
+            'Variazione dalla Baseline', 
             'ROI'
         ]
         
         st.dataframe(display_df.style.format({
-            'Total Profit': '€{:,.2f}',
-            'Change from Baseline': '{:.2%}',
+            'Profitto Totale': '€{:,.2f}',
+            'Variazione dalla Baseline': '{:.2%}',
             'ROI': '{:.2%}'
         }))
         
         # Interpretation
-        st.subheader("Key Insights")
+        st.subheader("Approfondimenti Chiave")
         
         if len(sensitivity_results) > 0:
             optimal_value = sensitivity_results.loc[
@@ -416,36 +419,36 @@ def main():
             profit_improvement = ((optimal_profit - baseline_profit) / baseline_profit) * 100 if baseline_profit != 0 else 0
             
             st.info(f"""
-            - The optimal value for {selected_param} appears to be {optimal_formatted} (baseline: {baseline_formatted})
-            - This would generate a total profit of €{optimal_profit:,.2f}, an improvement of {profit_improvement:.2f}% over the baseline
-            - The business is {'more' if abs(profit_improvement) > 10 else 'less'} sensitive to changes in this parameter
+            - Il valore ottimale per {selected_param} risulta essere {optimal_formatted} (baseline: {baseline_formatted})
+            - Questo genererebbe un profitto totale di €{optimal_profit:,.2f}, un miglioramento del {profit_improvement:.2f}% rispetto alla baseline
+            - Il business è {'più' if abs(profit_improvement) > 10 else 'meno'} sensibile ai cambiamenti di questo parametro
             """)
             
             # Additional insight based on parameter
             if param_details["param"] == "yearly_new_cards":
                 st.info("""
-                Consider the operational capacity required to handle increased card volume. 
-                Marketing and sales efforts should be aligned to achieve the optimal distribution target.
+                Considerare la capacità operativa necessaria per gestire un maggior volume di carte.
+                Gli sforzi di marketing e vendita dovrebbero essere allineati per raggiungere l'obiettivo di distribuzione ottimale.
                 """)
             elif param_details["param"] == "activation_rate":
                 st.info("""
-                Focus on improving the onboarding process to increase activation rates.
-                Consider implementation of activation incentives or streamlined verification procedures.
+                Concentrarsi sul miglioramento del processo di onboarding per aumentare i tassi di attivazione.
+                Considerare l'implementazione di incentivi all'attivazione o procedure di verifica semplificate.
                 """)
             elif param_details["param"] == "churn_rate":
                 st.info("""
-                Customer retention strategies will have a significant impact on long-term profitability.
-                Consider loyalty programs or improved customer service to reduce churn.
+                Le strategie di fidelizzazione dei clienti avranno un impatto significativo sulla redditività a lungo termine.
+                Considerare programmi fedeltà o un servizio clienti migliorato per ridurre l'abbandono.
                 """)
             elif param_details["param"] == "upfront_fee":
                 st.info("""
-                Balance fee optimization with market competitiveness. 
-                Consider a segmented pricing strategy based on customer profiles.
+                Bilanciare l'ottimizzazione delle commissioni con la competitività di mercato.
+                Considerare una strategia di prezzi segmentata basata sui profili dei clienti.
                 """)
             elif param_details["param"] == "avg_monthly_spend":
                 st.info("""
-                Encourage increased card usage through targeted promotions or rewards.
-                Focus on use cases that drive higher transaction volumes.
+                Incoraggiare un maggiore utilizzo delle carte attraverso promozioni mirate o premi.
+                Concentrarsi sui casi d'uso che generano volumi di transazioni più elevati.
                 """)
 
 if __name__ == "__main__":
