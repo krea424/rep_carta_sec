@@ -221,8 +221,8 @@ def main():
         ))
         
         # Add target line (projected 3000 cards over 3 years)
-        if 2025 in selected_years:
-            x_vals = [filtered_data['date'].min(), pd.Timestamp('2025-12-31')]
+        if 2027 in selected_years:
+            x_vals = [filtered_data['date'].min(), pd.Timestamp('2027-12-31')]
             y_vals = [0, 3000]
             
             fig.add_trace(go.Scatter(

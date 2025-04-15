@@ -110,8 +110,8 @@ def main():
                 st.metric("Carte per Mese (Media)", f"{kpis['total_cards_distributed'] / 36:.2f}")
                 
                 if 'cards_data' in st.session_state:
-                    year_3_cards = st.session_state.cards_data[st.session_state.cards_data['year'] == 2025]['active_cards'].iloc[-1]
-                    year_2_cards = st.session_state.cards_data[st.session_state.cards_data['year'] == 2024]['active_cards'].iloc[-1]
+                    year_3_cards = st.session_state.cards_data[st.session_state.cards_data['year'] == 2027]['active_cards'].iloc[-1]
+                    year_2_cards = st.session_state.cards_data[st.session_state.cards_data['year'] == 2026]['active_cards'].iloc[-1]
                     growth_rate = (year_3_cards / year_2_cards - 1) * 100
                     st.metric("Crescita Anno su Anno (A3)", f"{growth_rate:.2f}%")
             

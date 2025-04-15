@@ -20,7 +20,7 @@ def run_financial_scenario(
     Run a financial scenario with the given parameters and return the results.
     """
     # Create monthly breakdown
-    months = pd.date_range(start='2023-01-01', periods=years*12, freq='M')
+    months = pd.date_range(start='2025-01-01', periods=years*12, freq='ME')
     monthly_data = []
     
     # Initialize tracking variables
@@ -30,7 +30,7 @@ def run_financial_scenario(
     # Calculate monthly data
     for i, month in enumerate(months):
         year = month.year
-        year_idx = year - 2023  # 0 for first year, 1 for second, etc.
+        year_idx = year - 2025  # 0 for first year, 1 for second, etc.
         month_idx = month.month - 1  # 0-11 for months
         
         # Calculate new cards for this month (distribute evenly across the year)
@@ -47,7 +47,7 @@ def run_financial_scenario(
             active_cards = active_cards * (1 - monthly_churn) + new_cards * activation_rate
         
         # Reset YTD counter at the beginning of each year
-        if month.month == 1 and year > 2023:
+        if month.month == 1 and year > 2025:
             cards_distributed_ytd = yearly_new_cards / 12
             
         # Calculate average active cards (as per specification formula)

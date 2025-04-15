@@ -36,7 +36,7 @@ def generate_cards_data():
     churn_rate = 0.15        # 15% annual churn rate
     
     # Create monthly breakdown
-    months = pd.date_range(start='2023-01-01', periods=36, freq='M')
+    months = pd.date_range(start='2025-01-01', periods=36, freq='ME')
     monthly_data = []
     
     # Initialize tracking variables
@@ -46,7 +46,7 @@ def generate_cards_data():
     # Calculate monthly data
     for i, month in enumerate(months):
         year = month.year
-        year_idx = year - 2023  # 0 for first year, 1 for second, etc.
+        year_idx = year - 2025  # 0 for first year, 1 for second, etc.
         month_idx = month.month - 1  # 0-11 for months
         
         # Calculate new cards for this month (distribute evenly across the year)
@@ -63,7 +63,7 @@ def generate_cards_data():
             active_cards = active_cards * (1 - monthly_churn) + new_cards * activation_rate
         
         # Reset YTD counter at the beginning of each year
-        if month.month == 1 and year > 2023:
+        if month.month == 1 and year > 2025:
             cards_distributed_ytd = yearly_new_cards / 12
             
         # Calculate average active cards (as per specification formula)
@@ -135,21 +135,21 @@ def generate_segmentation_data():
     
     # Create distribution of segments
     segment_distribution = {
-        2023: {
+        2025: {
             "Young & Credit Newbies": 0.35,
             "Credit Rebuilders": 0.25,
             "New Immigrants/Expats": 0.15,
             "Self-Employed/Thin File": 0.15,
             "Risk-Averse Consumers": 0.10
         },
-        2024: {
+        2026: {
             "Young & Credit Newbies": 0.30,
             "Credit Rebuilders": 0.30,
             "New Immigrants/Expats": 0.15,
             "Self-Employed/Thin File": 0.15,
             "Risk-Averse Consumers": 0.10
         },
-        2025: {
+        2027: {
             "Young & Credit Newbies": 0.25,
             "Credit Rebuilders": 0.30,
             "New Immigrants/Expats": 0.20,
