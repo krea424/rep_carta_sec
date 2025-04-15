@@ -52,12 +52,12 @@ def main():
         col1, col2, col3 = st.columns(3)
         with col1:
             total_new = filtered_data['new_cards'].sum()
-            st.metric("Totale Nuove Carte", f"{total_new:,.0f}")
+            st.metric("Totale Nuove Carte", f"{total_new:.0f}")
         
         with col2:
             if not filtered_data.empty:
                 latest_active = filtered_data.iloc[-1]['active_cards']
-                st.metric("Carte Attive Attuali", f"{latest_active:,.0f}")
+                st.metric("Carte Attive Attuali", f"{latest_active:.0f}")
             else:
                 st.metric("Carte Attive Attuali", "0")
         
@@ -166,7 +166,7 @@ def main():
                 
                 # Calculate inactive cards
                 inactive_cards = total_issued - latest_active
-                st.metric("Carte Inattive", f"{inactive_cards:,.0f}")
+                st.metric("Carte Inattive", f"{inactive_cards:.0f}")
             else:
                 st.info("Nessun dato disponibile per il periodo selezionato.")
         
