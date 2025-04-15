@@ -42,20 +42,20 @@ def main():
             with mc1:
                 st.metric(
                     label="Totale Carte Distribuite", 
-                    value=f"{metrics['total_cards']:,}",
-                    delta=f"{metrics['growth_rate']:.1f}%" if 'growth_rate' in metrics else None
+                    value=f"{metrics['total_cards']:.0f}",
+                    delta=f"{metrics['growth_rate']:.2f}%" if 'growth_rate' in metrics else None
                 )
             with mc2:
                 st.metric(
                     label="Carte Attive", 
-                    value=f"{metrics['active_cards']:,}",
-                    delta=f"{metrics['active_rate']:.1f}%" if 'active_rate' in metrics else None
+                    value=f"{metrics['active_cards']:.0f}",
+                    delta=f"{metrics['active_rate']:.2f}%" if 'active_rate' in metrics else None
                 )
             with mc3:
                 st.metric(
                     label="Ricavi (Anno in Corso)", 
-                    value=f"€{metrics['revenue']:,.2f}",
-                    delta=f"{metrics['revenue_growth']:.1f}%" if 'revenue_growth' in metrics else None
+                    value=f"€{metrics['revenue']:.2f}",
+                    delta=f"{metrics['revenue_growth']:.2f}%" if 'revenue_growth' in metrics else None
                 )
                 
             # Main chart for cards distribution over time
