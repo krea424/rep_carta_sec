@@ -336,48 +336,48 @@ def main():
         """)
     
     with tab2:
-        st.subheader("Annual Performance Reports")
+        st.subheader("Report sulle Performance Annuali")
         
         col1, col2 = st.columns([1, 2])
         
         with col1:
             # Select year
             years = sorted(st.session_state.cards_data['year'].unique())
-            selected_year = st.selectbox("Select Year for Annual Report", options=years, key="annual_year")
+            selected_year = st.selectbox("Seleziona Anno per il Report Annuale", options=years, key="annual_year")
             
-            if st.button("Generate Annual Report"):
+            if st.button("Genera Report Annuale"):
                 # For now, we'll use the comprehensive report as the annual report
                 annual_report = generate_excel_report()
                 
                 if annual_report:
-                    st.success("Annual report generated successfully!")
+                    st.success("Report annuale generato con successo!")
                     st.markdown(
                         create_download_link(
                             annual_report, 
-                            f"FinEu_Annual_Report_{selected_year}.xlsx",
-                            "📥 Download Annual Report"
+                            f"FinEu_Report_Annuale_{selected_year}.xlsx",
+                            "📥 Scarica Report Annuale"
                         ),
                         unsafe_allow_html=True
                     )
                 else:
-                    st.error("Failed to generate report. No data available.")
+                    st.error("Impossibile generare il report. Nessun dato disponibile.")
             
             # Option to include all years in comprehensive report
-            if st.button("Generate Comprehensive Report (All Years)"):
+            if st.button("Genera Report Completo (Tutti gli Anni)"):
                 comprehensive_report = generate_excel_report()
                 
                 if comprehensive_report:
-                    st.success("Comprehensive report generated successfully!")
+                    st.success("Report completo generato con successo!")
                     st.markdown(
                         create_download_link(
                             comprehensive_report, 
-                            f"FinEu_Comprehensive_Report.xlsx",
-                            "📥 Download Comprehensive Report"
+                            f"FinEu_Report_Completo.xlsx",
+                            "📥 Scarica Report Completo"
                         ),
                         unsafe_allow_html=True
                     )
                 else:
-                    st.error("Failed to generate report. No data available.")
+                    st.error("Impossibile generare il report. Nessun dato disponibile.")
         
         with col2:
             # Show annual summary preview
@@ -389,22 +389,22 @@ def main():
                 annual_fin = fin_df[fin_df['year'] == selected_year]
                 
                 if not annual_cards.empty and not annual_fin.empty:
-                    st.info(f"Annual Report Preview for {selected_year}")
+                    st.info(f"Anteprima Report Annuale per il {selected_year}")
                     
                     # Create summary metrics
                     acol1, acol2, acol3 = st.columns(3)
                     
                     with acol1:
-                        st.metric("Annual New Cards", f"{annual_cards['new_cards'].sum():.0f}")
-                        st.metric("Year-End Active Cards", f"{annual_cards.iloc[-1]['active_cards']:.0f}")
+                        st.metric("Nuove Carte Annuali", f"{annual_cards['new_cards'].sum():.0f}")
+                        st.metric("Carte Attive Fine Anno", f"{annual_cards.iloc[-1]['active_cards']:.0f}")
                     
                     with acol2:
-                        st.metric("Annual Revenue", f"€{annual_fin['total_revenue'].sum():.2f}")
-                        st.metric("Annual Costs", f"€{annual_fin['total_costs'].sum():.2f}")
+                        st.metric("Ricavi Annuali", f"€{annual_fin['total_revenue'].sum():.2f}")
+                        st.metric("Costi Annuali", f"€{annual_fin['total_costs'].sum():.2f}")
                     
                     with acol3:
                         annual_profit = annual_fin['profit'].sum()
-                        st.metric("Annual Profit", f"€{annual_profit:.2f}")
+                        st.metric("Profitto Annuale", f"€{annual_profit:.2f}")
                         
                         # Calculate ROI
                         annual_costs = annual_fin['total_costs'].sum()
@@ -412,7 +412,7 @@ def main():
                         st.metric("ROI", f"{roi:.1f}%")
                     
                     # Show annual revenue breakdown
-                    st.subheader("Annual Revenue Breakdown")
+                    st.subheader("Ripartizione dei Ricavi Annuali")
                     
                     # Calculate revenue components
                     activation_revenue = annual_fin['upfront_fee_revenue'].sum()
@@ -420,7 +420,7 @@ def main():
                     
                     # Create pie chart
                     fig = go.Figure(data=[go.Pie(
-                        labels=['Activation Fee', 'Interchange Fee'],
+                        labels=['Commissione di Attivazione', 'Commissione di Interscambio'],
                         values=[activation_revenue, interchange_revenue],
                         hole=.4,
                         textinfo='label+percent',
@@ -435,106 +435,106 @@ def main():
         
         # Annual report description
         st.markdown("""
-        ### Annual Report Contents
+        ### Contenuto del Report Annuale
         
-        The annual performance report includes:
+        Il report delle performance annuali include:
         
-        - **Annual Summary**: Key metrics including total cards distributed, year-end active cards, revenue, costs, and profit
-        - **Card Distribution**: Monthly breakdown of card distribution for the selected year
-        - **Financial Performance**: Monthly revenue, costs, and profit analysis
-        - **Segment Analysis**: Customer segment distribution and performance
+        - **Riepilogo Annuale**: Metriche chiave tra cui totale carte distribuite, carte attive a fine anno, ricavi, costi e profitto
+        - **Distribuzione delle Carte**: Suddivisione mensile della distribuzione delle carte per l'anno selezionato
+        - **Performance Finanziaria**: Analisi mensile di ricavi, costi e profitto
+        - **Analisi dei Segmenti**: Distribuzione e performance dei segmenti di clientela
         
-        The comprehensive report includes data from all available years for trend analysis and long-term planning.
+        Il report completo include dati di tutti gli anni disponibili per l'analisi delle tendenze e la pianificazione a lungo termine.
         """)
     
     with tab3:
-        st.subheader("Regulatory Compliance Reports")
+        st.subheader("Report di Conformità Normativa")
         
         col1, col2 = st.columns([1, 2])
         
         with col1:
-            st.info("Regulatory Reporting")
+            st.info("Reportistica Normativa")
             st.markdown("""
-            Generate reports required for regulatory compliance, including:
+            Genera i report richiesti per la conformità normativa, inclusi:
             
-            - OAM (Organismo Agenti e Mediatori) reporting
-            - Banking partner compliance
-            - Transaction volume reporting
-            - Customer deposit summaries
+            - Reportistica OAM (Organismo Agenti e Mediatori)
+            - Conformità partner bancario
+            - Report sul volume delle transazioni
+            - Riepilogo dei depositi dei clienti
             """)
             
-            report_date = st.date_input("Report Date", datetime.now())
+            report_date = st.date_input("Data del Report", datetime.now())
             
-            if st.button("Generate Regulatory Report"):
+            if st.button("Genera Report Normativo"):
                 regulatory_report = generate_regulatory_report()
                 
                 if regulatory_report:
-                    st.success("Regulatory report generated successfully!")
+                    st.success("Report normativo generato con successo!")
                     st.markdown(
                         create_download_link(
                             regulatory_report, 
-                            f"FinEu_Regulatory_Report_{report_date.strftime('%Y-%m-%d')}.xlsx",
-                            "📥 Download Regulatory Report"
+                            f"FinEu_Report_Normativo_{report_date.strftime('%Y-%m-%d')}.xlsx",
+                            "📥 Scarica Report Normativo"
                         ),
                         unsafe_allow_html=True
                     )
                 else:
-                    st.error("Failed to generate report. No data available.")
+                    st.error("Impossibile generare il report. Nessun dato disponibile.")
         
         with col2:
-            st.subheader("Regulatory Compliance Overview")
+            st.subheader("Panoramica Conformità Normativa")
             
             # Create tabs for different regulatory aspects
-            reg_tabs = st.tabs(["OAM Compliance", "Banking Partner", "Customer Protection"])
+            reg_tabs = st.tabs(["Conformità OAM", "Partner Bancario", "Protezione del Cliente"])
             
             with reg_tabs[0]:
                 st.markdown("""
-                ### OAM Reporting Requirements
+                ### Requisiti di Reportistica OAM
                 
-                As a registered credit broker (mediatore creditizio), FinEu must report:
+                Come mediatore creditizio registrato, FinEu deve riportare:
                 
-                - **Card Distribution Volume**: Number of cards distributed per reporting period
-                - **Transaction Volume**: Total value of transactions facilitated
-                - **Customer Acquisition**: Number of new customers onboarded
-                - **Commission Structure**: Transparency on commission arrangements with banking partners
+                - **Volume di Distribuzione Carte**: Numero di carte distribuite per periodo di riferimento
+                - **Volume delle Transazioni**: Valore totale delle transazioni facilitate
+                - **Acquisizione Clienti**: Numero di nuovi clienti acquisiti
+                - **Struttura delle Commissioni**: Trasparenza sugli accordi di commissione con i partner bancari
                 
-                The OAM regulatory report includes all required data formatted according to OAM guidelines.
+                Il report normativo OAM include tutti i dati richiesti formattati secondo le linee guida OAM.
                 """)
             
             with reg_tabs[1]:
                 st.markdown("""
-                ### Banking Partner Reporting
+                ### Reportistica Partner Bancario
                 
-                For the Lithuanian banking partner, FinEu must provide:
+                Per il partner bancario lituano, FinEu deve fornire:
                 
-                - **Customer Acquisition**: Detailed reporting on new customers
-                - **Transaction Volume**: Monthly transaction volumes and revenue
-                - **Deposit Volume**: Total secured deposits maintained by customers
-                - **Market Performance**: Key performance indicators in the Italian market
+                - **Acquisizione Clienti**: Reportistica dettagliata sui nuovi clienti
+                - **Volume Transazioni**: Volumi di transazione mensili e ricavi
+                - **Volume Depositi**: Depositi garantiti totali mantenuti dai clienti
+                - **Performance di Mercato**: Indicatori chiave di performance nel mercato italiano
                 
-                This report ensures full transparency with the banking partner and compliance with the partnership agreement.
+                Questo report garantisce piena trasparenza con il partner bancario e conformità con l'accordo di partnership.
                 """)
             
             with reg_tabs[2]:
                 st.markdown("""
-                ### Customer Protection Compliance
+                ### Conformità alla Protezione del Cliente
                 
-                The report includes data relevant to consumer protection regulations:
+                Il report include dati rilevanti per le normative sulla protezione dei consumatori:
                 
-                - **Transparent Fee Disclosure**: Evidence of fee and commission disclosure
-                - **Deposit Security**: Reporting on secured deposits and interest accrual
-                - **Credit Terms**: Documentation of credit terms provided to customers
-                - **Complaint Handling**: Summary of any customer complaints and resolution
+                - **Trasparenza delle Commissioni**: Evidenza della divulgazione di commissioni e spese
+                - **Sicurezza dei Depositi**: Reportistica sui depositi garantiti e maturazione degli interessi
+                - **Termini di Credito**: Documentazione dei termini di credito forniti ai clienti
+                - **Gestione Reclami**: Riepilogo dei reclami dei clienti e relativa risoluzione
                 
-                This ensures compliance with both Italian and EU consumer protection regulations.
+                Questo garantisce la conformità sia alle normative italiane che europee sulla protezione dei consumatori.
                 """)
     
     with tab4:
-        st.subheader("Custom Report Builder")
+        st.subheader("Generatore di Report Personalizzati")
         
         st.info("""
-        Build custom reports with selected metrics and time periods. 
-        These reports can be used for specific analysis needs or stakeholder presentations.
+        Crea report personalizzati con metriche e periodi di tempo selezionati. 
+        Questi report possono essere utilizzati per esigenze di analisi specifiche o presentazioni agli stakeholder.
         """)
         
         # Custom report parameters
@@ -542,52 +542,52 @@ def main():
         
         with col1:
             # Time period selection
-            st.subheader("Select Time Period")
-            report_type = st.radio("Report Type", ["Year-to-Date", "Specific Period", "All Data"])
+            st.subheader("Seleziona Periodo")
+            report_type = st.radio("Tipo di Report", ["Da Inizio Anno", "Periodo Specifico", "Tutti i Dati"])
             
-            if report_type == "Year-to-Date":
-                ytd_year = st.selectbox("Year", options=sorted(st.session_state.cards_data['year'].unique()), key="ytd_year")
-                ytd_month = st.slider("Month", min_value=1, max_value=12, value=datetime.now().month if datetime.now().year == ytd_year else 12)
+            if report_type == "Da Inizio Anno":
+                ytd_year = st.selectbox("Anno", options=sorted(st.session_state.cards_data['year'].unique()), key="ytd_year")
+                ytd_month = st.slider("Mese", min_value=1, max_value=12, value=datetime.now().month if datetime.now().year == ytd_year else 12)
             
-            elif report_type == "Specific Period":
-                start_date = st.date_input("Start Date", datetime(2023, 1, 1))
-                end_date = st.date_input("End Date", datetime(2025, 12, 31))
+            elif report_type == "Periodo Specifico":
+                start_date = st.date_input("Data Inizio", datetime(2023, 1, 1))
+                end_date = st.date_input("Data Fine", datetime(2025, 12, 31))
         
         with col2:
             # Content selection
-            st.subheader("Select Report Content")
+            st.subheader("Seleziona Contenuto Report")
             
-            include_cards = st.checkbox("Card Distribution Metrics", value=True)
-            include_financial = st.checkbox("Financial Performance", value=True)
-            include_segments = st.checkbox("Customer Segmentation", value=True)
-            include_projections = st.checkbox("Financial Projections", value=False)
+            include_cards = st.checkbox("Metriche Distribuzione Carte", value=True)
+            include_financial = st.checkbox("Performance Finanziaria", value=True)
+            include_segments = st.checkbox("Segmentazione Clientela", value=True)
+            include_projections = st.checkbox("Proiezioni Finanziarie", value=False)
             
-            report_format = st.selectbox("Report Format", ["Excel", "PDF (Coming Soon)"])
+            report_format = st.selectbox("Formato Report", ["Excel", "PDF (Prossimamente)"])
             
-            report_name = st.text_input("Report Name", "FinEu_Custom_Report")
+            report_name = st.text_input("Nome Report", "FinEu_Report_Personalizzato")
         
-        if st.button("Generate Custom Report"):
+        if st.button("Genera Report Personalizzato"):
             # For now, we'll use the comprehensive report as the custom report
             # In a real implementation, this would be customized based on the selections
             custom_report = generate_excel_report()
             
             if custom_report:
-                st.success("Custom report generated successfully!")
+                st.success("Report personalizzato generato con successo!")
                 st.markdown(
                     create_download_link(
                         custom_report, 
                         f"{report_name}.xlsx",
-                        "📥 Download Custom Report"
+                        "📥 Scarica Report Personalizzato"
                     ),
                     unsafe_allow_html=True
                 )
             else:
-                st.error("Failed to generate report. No data available.")
+                st.error("Impossibile generare il report. Nessun dato disponibile.")
         
         # Show report preview elements
-        st.subheader("Report Preview Elements")
+        st.subheader("Elementi di Anteprima del Report")
         
-        preview_tabs = st.tabs(["Distribution", "Financial", "Segments"])
+        preview_tabs = st.tabs(["Distribuzione", "Finanziario", "Segmenti"])
         
         with preview_tabs[0]:
             if include_cards and 'cards_data' in st.session_state:
