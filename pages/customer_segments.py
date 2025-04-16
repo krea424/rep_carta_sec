@@ -139,7 +139,7 @@ def main():
                     st.subheader("Analisi Crescita Segmenti")
                     
                     # Compare to previous year if not first year
-                    if selected_year > 2023:
+                    if selected_year > 2025:
                         prev_year = selected_year - 1
                         prev_distribution = segmentation_data['distribution'][prev_year]
                         prev_year_data = st.session_state.cards_data[st.session_state.cards_data['year'] == prev_year]

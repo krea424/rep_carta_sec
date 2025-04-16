@@ -207,7 +207,7 @@ def generate_regulatory_report():
         # Calculate estimated deposits by segment
         deposit_data = []
         
-        for year in [2023, 2024, 2025]:
+        for year in [2025, 2026, 2027]:
             year_active = cards_df[cards_df['year'] == year].iloc[-1]['active_cards'] if year in cards_df['year'].values else 0
             
             for segment, percentage in seg_data['distribution'][year].items():
@@ -550,8 +550,8 @@ def main():
                 ytd_month = st.slider("Mese", min_value=1, max_value=12, value=datetime.now().month if datetime.now().year == ytd_year else 12)
             
             elif report_type == "Periodo Specifico":
-                start_date = st.date_input("Data Inizio", datetime(2023, 1, 1))
-                end_date = st.date_input("Data Fine", datetime(2025, 12, 31))
+                start_date = st.date_input("Data Inizio", datetime(2025, 1, 1))
+                end_date = st.date_input("Data Fine", datetime(2027, 12, 31))
         
         with col2:
             # Content selection
